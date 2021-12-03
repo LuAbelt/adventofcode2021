@@ -67,8 +67,13 @@ void part2(){
     std::cout << down*forward<<std::endl;
 }
 
-int main(){
-part2();
+int main(int argc, char *argv[]){
+  if(std::string(argv[0])=="--one"){
+    part1();
+  }
+  if(std::string(argv[0])=="--two"){
+    part2();
+  }
 }
 
 
