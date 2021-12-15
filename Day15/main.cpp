@@ -4,22 +4,151 @@
 
 #include <iostream>
 #include <vector>
+#include <queue>
+#include <set>
+#include <array>
 
 using namespace std;
 
+using Grid = vector<vector<int>>;
+
+struct Dir {
+  int x;
+  int y;
+};
+
+struct OpenNode {
+  size_t cost;
+  size_t x;
+  size_t y;
+};
+
 void part1(){
-  std::string line;
-  while((std::cin >> line) && !line.empty()){
-    // Read input
-  }
+    std::string line;
+	getline(std::cin, line);
+	Grid map = Grid(line.length(),vector<int>(line.length()));
+
+	int gridSize = line.length();
+
+	for (int y =0;y<line.length();++y) {
+		map[0][y]=line[y]-'0';
+	}
+
+	int x = 1;
+    while(getline(std::cin, line) && !line.empty()){
+        // Read input
+		for (int y =0;y<line.length();++y) {
+	    	map[x][y]=line[y]-'0';
+	    }
+		++x;
+    }
+
+	auto cmp = [](const OpenNode &left,
+		const OpenNode &right){
+		return left.cost>right.cost;
+	};
+
+	set<std::array<int,3>> open;
+
+	vector<vector<bool>> closed(gridSize,vector<bool>(gridSize,false));
+	vector<vector<size_t>> cost(gridSize,vector<size_t>(gridSize,std::numeric_limits<size_t>::max()));
+
+	open.insert({0,0,0});
+
+	vector<Dir> directions = {{-1,0},{0,1},{1,0},{0,-1}};
+
+	while (!open.empty()){
+		auto node = *open.begin();
+		open.erase(open.begin());
+
+		closed[node[1]][node[2]]=true;
+
+		//cout << "Expanding " << node.x << "," << node.y << " with cost "<<node.cost<<endl;
+		// Goal test
+		if((node[1] == gridSize-1) &&(node[2] == gridSize-1)){
+			cout << node[0] << endl;
+			break;
+		}
+
+		for (const auto& dir:directions) {
+			auto newX = node[1]+dir.x;
+			auto newY = node[2]+dir.y;
+			if((newX<0) || (newX>=gridSize) || (newY<0) || (newY>=gridSize)){
+				continue;
+			}
+			auto newCost = node[0]+map[newX][newY];
+
+			if(closed[newX][newY] || newCost > cost[newX][newY]){
+				continue;
+			}
+			//cout << "Adding " <<newX<<","<<newY<< " with cost "<<node.first+map[newX][newY] << endl;
+			open.insert({newCost,newX,newY});
+		}
+	}
 }
 
 void part2(){
-  std::string line;
+	std::string line;
+	getline(std::cin, line);
+	Grid map = Grid(line.length(),vector<int>(line.length()));
 
-  while((std::cin >> line) && !line.empty()) {
-      // Read input
-  }
+	int gridSize = line.length();
+
+	for (int y =0;y<line.length();++y) {
+		map[0][y]=line[y]-'0';
+	}
+
+	int x = 1;
+	while(getline(std::cin, line) && !line.empty()){
+		// Read input
+		for (int y =0;y<line.length();++y) {
+			map[x][y]=line[y]-'0';
+		}
+		++x;
+	}
+
+	auto cmp = [](const OpenNode &left,
+	              const OpenNode &right){
+	  return left.cost>right.cost;
+	};
+
+	set<std::array<int,3>> open;
+
+	vector<vector<bool>> closed(gridSize,vector<bool>(gridSize,false));
+	vector<vector<size_t>> cost(gridSize,vector<size_t>(gridSize,std::numeric_limits<size_t>::max()));
+
+	open.insert({0,0,0});
+
+	vector<Dir> directions = {{-1,0},{0,1},{1,0},{0,-1}};
+
+	while (!open.empty()){
+		auto node = *open.begin();
+		open.erase(open.begin());
+
+		closed[node[1]][node[2]]=true;
+
+		//cout << "Expanding " << node.x << "," << node.y << " with cost "<<node.cost<<endl;
+		// Goal test
+		if((node[1] == gridSize-1) &&(node[2] == gridSize-1)){
+			cout << node[0] << endl;
+			break;
+		}
+
+		for (const auto& dir:directions) {
+			auto newX = node[1]+dir.x;
+			auto newY = node[2]+dir.y;
+			if((newX<0) || (newX>=gridSize) || (newY<0) || (newY>=gridSize)){
+				continue;
+			}
+			auto newCost = node[0]+map[newX][newY];
+
+			if(closed[newX][newY] || newCost > cost[newX][newY]){
+				continue;
+			}
+			//cout << "Adding " <<newX<<","<<newY<< " with cost "<<node.first+map[newX][newY] << endl;
+			open.insert({newCost,newX,newY});
+		}
+	}
 }
 
 int main(int argc, char* argv[]){
