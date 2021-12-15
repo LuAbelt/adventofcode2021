@@ -43,10 +43,14 @@ void part1(){
 		++x;
     }
 
-	auto cmp = [](const OpenNode &left,
-		const OpenNode &right){
-		return left.cost>right.cost;
-	};
+    for (const auto& line: map) {
+        for (auto val:line) {
+            cout << val;
+        }
+        cout << endl;
+    }
+
+
 
 	set<std::array<int,3>> open;
 
@@ -90,32 +94,52 @@ void part1(){
 void part2(){
 	std::string line;
 	getline(std::cin, line);
-	Grid map = Grid(line.length(),vector<int>(line.length()));
+	Grid map = Grid(line.length()*5,vector<int>(line.length()*5));
 
 	int gridSize = line.length();
 
 	for (int y =0;y<line.length();++y) {
-		map[0][y]=line[y]-'0';
+        int baseVal = line[y]-'0';
+        for(int mapX=0;mapX<5;++mapX) {
+            for (int mapY = 0; mapY < 5; ++mapY) {
+                int val = baseVal+mapX+mapY;
+                if(val>9){
+                    val-=9;
+                }
+                map[mapX*gridSize][mapY*gridSize+y]=val;
+            }
+        }
 	}
 
 	int x = 1;
 	while(getline(std::cin, line) && !line.empty()){
 		// Read input
 		for (int y =0;y<line.length();++y) {
-			map[x][y]=line[y]-'0';
+			int baseVal = line[y]-'0';
+            for(int mapX=0;mapX<5;++mapX) {
+                for (int mapY = 0; mapY < 5; ++mapY) {
+                    int val = baseVal+mapX+mapY;
+                    if(val>9){
+                        val-=9;
+                    }
+                    map[mapX*gridSize+x][mapY*gridSize+y]=val;
+                }
+            }
 		}
 		++x;
 	}
 
-	auto cmp = [](const OpenNode &left,
-	              const OpenNode &right){
-	  return left.cost>right.cost;
-	};
+    for (const auto& line: map) {
+        for (auto val:line) {
+            cout << val;
+        }
+        cout << endl;
+    }
 
 	set<std::array<int,3>> open;
 
-	vector<vector<bool>> closed(gridSize,vector<bool>(gridSize,false));
-	vector<vector<size_t>> cost(gridSize,vector<size_t>(gridSize,std::numeric_limits<size_t>::max()));
+	vector<vector<bool>> closed(gridSize*5,vector<bool>(gridSize*5,false));
+	vector<vector<size_t>> cost(gridSize*5,vector<size_t>(gridSize*5,std::numeric_limits<size_t>::max()));
 
 	open.insert({0,0,0});
 
@@ -129,7 +153,7 @@ void part2(){
 
 		//cout << "Expanding " << node.x << "," << node.y << " with cost "<<node.cost<<endl;
 		// Goal test
-		if((node[1] == gridSize-1) &&(node[2] == gridSize-1)){
+		if((node[1] == gridSize*5-1) &&(node[2] == gridSize*5-1)){
 			cout << node[0] << endl;
 			break;
 		}
@@ -137,7 +161,7 @@ void part2(){
 		for (const auto& dir:directions) {
 			auto newX = node[1]+dir.x;
 			auto newY = node[2]+dir.y;
-			if((newX<0) || (newX>=gridSize) || (newY<0) || (newY>=gridSize)){
+			if((newX<0) || (newX>=gridSize*5) || (newY<0) || (newY>=gridSize*5)){
 				continue;
 			}
 			auto newCost = node[0]+map[newX][newY];
