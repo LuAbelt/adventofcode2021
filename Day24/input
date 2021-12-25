@@ -1,0 +1,41 @@
+Stack.push(w1+15);
+Stack.push(w2+12);
+Stack.push(w3+15);
+
+if(w4!=Stack.pop()-9)
+    Stack.push(w4+12)
+
+if(w5!=Stack.pop()-7)
+    Stack.push(w5+15)
+
+Stack.push(w6+2)
+
+if(w7!=Stack.pop()-1)
+    Stack.push(w7+11)
+
+if(w8!=Stack.pop()-16)
+    Stack.push(w8+15)
+
+Stack.push(w9+10)
+
+if(w10!=Stack.pop()-15)
+    Stack.push(w10+2)
+
+Stack.push(w11+0)
+Stack.push(w12+0)
+
+if(w13!=Stack.pop()-4)
+    Stack.push(w13+15)
+
+if(w14!=Stack.pop())
+    Stack.push(w14+15)
+
+
+w14==w11
+w13==w12-4
+w10==w9-5
+w7==w6+1
+w4==w3+6
+w5==w2+5
+w8==w1-1
+X439989X94X95X
